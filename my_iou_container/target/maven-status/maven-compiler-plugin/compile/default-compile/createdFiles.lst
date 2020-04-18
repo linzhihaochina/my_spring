@@ -1,8 +1,0 @@
-com/youngforcoding/util/TransactionManager.class
-com/youngforcoding/annotation/Inject.class
-com/youngforcoding/factory/ProxyFactory.class
-com/youngforcoding/factory/ProxyFactory$2.class
-com/youngforcoding/factory/BeanFactory.class
-com/youngforcoding/factory/ProxyFactory$1.class
-com/youngforcoding/util/ConnectionUtils.class
-com/youngforcoding/util/DruidUtils.class

@@ -4,25 +4,17 @@ package com.youngforcoding.service.impl;
 import com.youngforcoding.dao.AccountDao;
 import com.youngforcoding.pojo.Account;
 import com.youngforcoding.service.TransferService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author 应癫
  */
+@Service("transferService")
 public class TransferServiceImpl implements TransferService {
 
-    //private AccountDao accountDao = new JdbcAccountDaoImpl();
-
-    // private AccountDao accountDao = (AccountDao) BeanFactoryImpl.getBean("accountDao");
-
-    // 最佳状态
+    @Autowired
     private AccountDao accountDao;
-
-    // 构造函数传值/set方法传值
-
-    public void setAccountDao(AccountDao accountDao) {
-        this.accountDao = accountDao;
-    }
-
 
 
     @Override

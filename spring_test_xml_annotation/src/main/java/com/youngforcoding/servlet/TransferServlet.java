@@ -4,9 +4,11 @@ import com.youngforcoding.factory.ProxyFactory;
 import com.youngforcoding.pojo.Result;
 import com.youngforcoding.service.TransferService;
 import com.youngforcoding.util.JsonUtils;
-import com.youngforcoding.util.SpringContextUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,27 +28,21 @@ import java.io.IOException;
 @WebServlet(name = "transferServlet", urlPatterns = "/transferServlet")
 public class TransferServlet extends HttpServlet {
 
-    /**
-     * 不通过web容器启动Spring容器，自己启动Spring容器
-     */
-//    private ProxyFactory proxyFactory = (ProxyFactory) SpringContextUtil.getBean("proxyFactory");
-//    private TransferService transferService = (TransferService) proxyFactory.getJdkProxy(SpringContextUtil.getBean("transferService"));
-
+    @Autowired
     private TransferService transferService;
-
 
     @Override
     public void init() throws ServletException {
         //  通过ServletContext获取Spring容器(Spring容器将WebApplicationContext注入到了ServletContext中)
         //  WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
 
-        WebApplicationContext webApplicationContext = (WebApplicationContext) this.getServletContext()
-                .getAttribute("org.springframework.web.context.WebApplicationContext.ROOT");
-        ProxyFactory proxyFactory = (ProxyFactory) webApplicationContext.getBean("proxyFactory");
-        transferService = (TransferService) proxyFactory.getJdkProxy(webApplicationContext.getBean("transferService"));
-    }
-
-    public TransferServlet() {
+//        WebApplicationContext webApplicationContext = (WebApplicationContext) this.getServletContext()
+//                .getAttribute("org.springframework.web.context.WebApplicationContext.ROOT");
+//        ProxyFactory proxyFactory = (ProxyFactory) webApplicationContext.getBean("proxyFactory");
+//        transferService = (TransferService) proxyFactory.getJdkProxy(webApplicationContext.getBean("transferService"));
+        ServletContext cont = getServletContext();
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, cont);
+        super.init();
     }
 
     @Override
