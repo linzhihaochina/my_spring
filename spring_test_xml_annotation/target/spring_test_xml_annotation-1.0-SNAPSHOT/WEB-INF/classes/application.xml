@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/test_db"/>
+        <property name="username" value="root"/>
+        <property name="password" value="123456"/>
+    </bean>
+
+    <bean id="configUtil" class="com.youngforcoding.util.ConnectionUtils"/>
+    <bean id="accountDao" class="com.youngforcoding.dao.impl.JdbcAccountDaoImpl">
+        <property name="connectionUtils" ref="configUtil"/>
+    </bean>
+    <bean id="transactionManager" class="com.youngforcoding.util.TransactionManager">
+        <property name="connectionUtils" ref="configUtil"/>
+    </bean>
+    <bean id="transferService" class="com.youngforcoding.service.impl.TransferServiceImpl">
+        <property name="accountDao" ref="accountDao"/>
+    </bean>
+    <bean id="proxyFactory" class="com.youngforcoding.factory.ProxyFactory">
+        <property name="transactionManager" ref="transactionManager"/>
+    </bean>
+
+
+</beans>
