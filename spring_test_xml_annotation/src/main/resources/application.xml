@@ -16,5 +16,10 @@
 
     <context:component-scan base-package="com.youngforcoding"/>
 
+    <bean id="aa" class="java.lang.Object"/>
+    <bean class="java.lang.Object"/>
+    <bean class="java.lang.Object"/>
+    <bean class="java.lang.String"/>
+
 
 </beans>

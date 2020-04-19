@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Proxy;
 
-@Component
+@Component("ProxyFactory1")
 public class ProxyFactory {
 
 

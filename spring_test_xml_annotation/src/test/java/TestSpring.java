@@ -1,5 +1,6 @@
 import com.youngforcoding.pojo.DITarget;
 import com.youngforcoding.pojo.LazyObj;
+import com.youngforcoding.pojo.ResourceTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -49,5 +50,20 @@ public class TestSpring {
         System.out.println(diTarget.getLazyObj());
 
         System.out.println(applicationContext.getBean("diTarget2"));
+    }
+
+    @Test
+    public void test03(){
+        ResourceTest resourceTest = (ResourceTest) applicationContext.getBean("resourceTest");
+//        System.out.println(resourceTest.getProxyFactory());
+        Object aa2 = applicationContext.getBean("java.lang.Object");
+        Object aa3 = applicationContext.getBean("java.lang.Object");
+        Object aa4 = applicationContext.getBean("java.lang.Object");
+        System.out.println(aa2);
+        System.out.println(aa3);
+        System.out.println(aa4);
+        System.out.println(resourceTest);
+        System.out.println(resourceTest.getAa2());
+
     }
 }

@@ -1,6 +1,7 @@
 /Users/linzhihao/study/my_spring/spring_test_xml_annotation/src/main/java/com/youngforcoding/service/TransferService.java
 /Users/linzhihao/study/my_spring/spring_test_xml_annotation/src/main/java/com/youngforcoding/util/ConnectionUtils.java
 /Users/linzhihao/study/my_spring/spring_test_xml_annotation/src/main/java/com/youngforcoding/pojo/DITarget.java
+/Users/linzhihao/study/my_spring/spring_test_xml_annotation/src/main/java/com/youngforcoding/pojo/ResourceTest.java
 /Users/linzhihao/study/my_spring/spring_test_xml_annotation/src/main/java/com/youngforcoding/pojo/LazyObj.java
 /Users/linzhihao/study/my_spring/spring_test_xml_annotation/src/main/java/com/youngforcoding/dao/impl/JdbcAccountDaoImpl.java
 /Users/linzhihao/study/my_spring/spring_test_xml_annotation/src/main/java/com/youngforcoding/util/TransactionManager.java

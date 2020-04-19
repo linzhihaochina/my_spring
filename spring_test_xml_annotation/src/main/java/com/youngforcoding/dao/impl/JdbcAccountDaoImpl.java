@@ -5,6 +5,7 @@ import com.youngforcoding.dao.AccountDao;
 import com.youngforcoding.pojo.Account;
 import com.youngforcoding.util.ConnectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -15,6 +16,7 @@ import java.sql.ResultSet;
  * @author 应癫
  */
 @Repository("accountDao")
+@Scope("singleton")
 public class JdbcAccountDaoImpl implements AccountDao {
 
     @Autowired
