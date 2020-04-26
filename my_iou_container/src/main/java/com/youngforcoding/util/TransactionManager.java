@@ -1,46 +1,30 @@
 package com.youngforcoding.util;
 
+import javax.sql.DataSource;
 import java.sql.SQLException;
 
 /**
- * @author 应癫
- *
  * 事务管理器类：负责手动事务的开启、提交、回滚
  */
 public class TransactionManager {
 
-    private ConnectionUtils connectionUtils;
-
-    public void setConnectionUtils(ConnectionUtils connectionUtils) {
-        this.connectionUtils = connectionUtils;
-    }
-
-    /*private TransactionManager(){
-
-    }
-
-    private static TransactionManager transactionManager = new TransactionManager();
-
-    public static TransactionManager getInstance() {
-        return  transactionManager;
-    }*/
-
-
+    public static DataSource dataSource;
 
     // 开启手动事务控制
-    public void beginTransaction() throws SQLException {
-        connectionUtils.getCurrentThreadConn().setAutoCommit(false);
+    public static void beginTransaction() throws SQLException {
+        ConnectionUtil.setConnection(dataSource.getConnection());
+        ConnectionUtil.getConnection().setAutoCommit(false);
     }
 
 
     // 提交事务
-    public void commit() throws SQLException {
-        connectionUtils.getCurrentThreadConn().commit();
+    public static void commit() throws SQLException {
+        ConnectionUtil.getConnection().commit();
     }
 
 
     // 回滚事务
-    public void rollback() throws SQLException {
-        connectionUtils.getCurrentThreadConn().rollback();
+    public static void rollback() throws SQLException {
+        ConnectionUtil.getConnection().rollback();
     }
 }

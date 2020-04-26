@@ -1,6 +1,8 @@
+import com.youngforcoding.pojo.AopTest;
 import com.youngforcoding.pojo.DITarget;
 import com.youngforcoding.pojo.LazyObj;
 import com.youngforcoding.pojo.ResourceTest;
+import com.youngforcoding.service.TransferService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -20,7 +22,7 @@ public class TestSpring {
     ApplicationContext applicationContext;
 
     @Before
-    public void prepare(){
+    public void prepare() {
         applicationContext = new ClassPathXmlApplicationContext("application.xml");
     }
 
@@ -44,7 +46,7 @@ public class TestSpring {
     }
 
     @Test
-    public void test02(){
+    public void test02() {
         DITarget diTarget = (DITarget) applicationContext.getBean("diTarget");
         System.out.println(diTarget);
         System.out.println(diTarget.getLazyObj());
@@ -53,7 +55,7 @@ public class TestSpring {
     }
 
     @Test
-    public void test03(){
+    public void test03() {
         ResourceTest resourceTest = (ResourceTest) applicationContext.getBean("resourceTest");
 //        System.out.println(resourceTest.getProxyFactory());
         Object aa2 = applicationContext.getBean("java.lang.Object");
@@ -64,6 +66,17 @@ public class TestSpring {
         System.out.println(aa4);
         System.out.println(resourceTest);
         System.out.println(resourceTest.getAa2());
+    }
 
+    @Test
+    public void test04() {
+        AopTest aopTest = (AopTest) applicationContext.getBean("aopTest");
+        aopTest.sayHello();
+    }
+
+    @Test
+    public void test05() throws Exception {
+        TransferService transferService = (TransferService) applicationContext.getBean("transferService");
+        transferService.transfer("6029621011001", "6029621011000", 10);
     }
 }

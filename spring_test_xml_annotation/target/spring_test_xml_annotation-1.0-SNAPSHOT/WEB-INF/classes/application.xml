@@ -1,23 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context.xsd">
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3306/test_db"/>
-        <property name="username" value="root"/>
-        <property name="password" value="123456"/>
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
     </bean>
 
     <context:component-scan base-package="com.youngforcoding"/>
+    <context:property-placeholder location="classpath*:jdbc.properties"/>
 
     <bean id="aa" class="java.lang.Object"/>
-    <bean name="aa2,aa3" class="java.lang.Object"/>
-    <bean id="s" name="aa2" class="java.lang.String"/>
+    <bean class="java.lang.Object"/>
+    <bean class="java.lang.Object"/>
+    <bean class="java.lang.String"/>
+
+    <!--开启spring对注解aop的支持-->
+    <!--    <aop:aspectj-autoproxy/>-->
+
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="transactionManager1" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <constructor-arg name="dataSource" ref="dataSource"/>
+    </bean>
+    <!--    <tx:advice id="txAdvice" transaction-manager="transactionManager">-->
+    <!--        <tx:attributes>-->
+    <!--            <tx:method name="*" timeout="1000" read-only="false" propagation="REQUIRED" isolation="DEFAULT"-->
+    <!--                       rollback-for="java.lang.Exception"/>-->
+    <!--        </tx:attributes>-->
+    <!--    </tx:advice>-->
+    <!--开始spring对注解事务的支持-->
+    <tx:annotation-driven transaction-manager="transactionManager1"/>
 
 </beans>

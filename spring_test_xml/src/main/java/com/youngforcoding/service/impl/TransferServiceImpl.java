@@ -4,6 +4,9 @@ package com.youngforcoding.service.impl;
 import com.youngforcoding.dao.AccountDao;
 import com.youngforcoding.pojo.Account;
 import com.youngforcoding.service.TransferService;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author 应癫
@@ -23,6 +26,11 @@ public class TransferServiceImpl implements TransferService {
         this.accountDao = accountDao;
     }
 
+    @Override
+    public void transfer() {
+        System.out.println("transfer");
+        System.out.println(1 / 0);
+    }
 
 
     @Override
@@ -32,15 +40,15 @@ public class TransferServiceImpl implements TransferService {
             // 开启事务(关闭事务的自动提交)
             TransactionManager.getInstance().beginTransaction();*/
 
-            Account from = accountDao.queryAccountByCardNo(fromCardNo);
-            Account to = accountDao.queryAccountByCardNo(toCardNo);
+        Account from = accountDao.queryAccountByCardNo(fromCardNo);
+        Account to = accountDao.queryAccountByCardNo(toCardNo);
 
-            from.setMoney(from.getMoney()-money);
-            to.setMoney(to.getMoney()+money);
+        from.setMoney(from.getMoney() - money);
+        to.setMoney(to.getMoney() + money);
 
-            accountDao.updateAccountByCardNo(to);
-            //int c = 1/0;
-            accountDao.updateAccountByCardNo(from);
+        accountDao.updateAccountByCardNo(to);
+        int c = 1 / 0;
+        accountDao.updateAccountByCardNo(from);
 
         /*    // 提交事务
 
@@ -54,9 +62,5 @@ public class TransferServiceImpl implements TransferService {
             throw e;
 
         }*/
-
-
-
-
     }
 }

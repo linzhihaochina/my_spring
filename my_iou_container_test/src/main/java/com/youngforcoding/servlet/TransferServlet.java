@@ -1,11 +1,11 @@
 package com.youngforcoding.servlet;
 
 import com.youngforcoding.factory.BeanFactory;
-import com.youngforcoding.factory.ProxyFactory;
 import com.youngforcoding.pojo.Result;
 import com.youngforcoding.service.TransferService;
 import com.youngforcoding.util.JsonUtils;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,11 +24,15 @@ import java.io.IOException;
 @WebServlet(name = "transferServlet", urlPatterns = "/transferServlet")
 public class TransferServlet extends HttpServlet {
 
-    // 首先从BeanFactory获取到proxyFactory代理工厂的实例化对象
-    private ProxyFactory proxyFactory = (ProxyFactory) BeanFactory.getBean("proxyFactory");
-    private TransferService transferService = (TransferService) proxyFactory.getJdkProxy(BeanFactory.getBean("transferService"));
+    private TransferService transferService;
 
     public TransferServlet() {
+    }
+
+    @Override
+    public void init() throws ServletException {
+        BeanFactory context = (BeanFactory) this.getServletContext().getAttribute("context");
+        transferService = (TransferService) context.getBean("transferServiceImpl");
     }
 
     @Override

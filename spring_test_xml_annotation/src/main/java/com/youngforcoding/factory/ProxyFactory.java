@@ -12,7 +12,7 @@ import java.lang.reflect.Proxy;
 public class ProxyFactory {
 
 
-    @Autowired
+    //@Autowired
     private TransactionManager transactionManager;
 
     /**

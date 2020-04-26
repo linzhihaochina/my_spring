@@ -6,11 +6,15 @@ import com.youngforcoding.pojo.Account;
 import com.youngforcoding.service.TransferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author 应癫
  */
 @Service("transferService")
+@Transactional
 public class TransferServiceImpl implements TransferService {
 
     @Autowired
@@ -18,6 +22,8 @@ public class TransferServiceImpl implements TransferService {
 
 
     @Override
+//    @Transactional(rollbackFor = Exception.class, timeout = 1000, isolation = Isolation.REPEATABLE_READ
+//            , propagation = Propagation.REQUIRED)
     public void transfer(String fromCardNo, String toCardNo, int money) throws Exception {
 
         /*try{
@@ -31,7 +37,7 @@ public class TransferServiceImpl implements TransferService {
             to.setMoney(to.getMoney()+money);
 
             accountDao.updateAccountByCardNo(to);
-            //int c = 1/0;
+            int c = 1/0;
             accountDao.updateAccountByCardNo(from);
 
         /*    // 提交事务

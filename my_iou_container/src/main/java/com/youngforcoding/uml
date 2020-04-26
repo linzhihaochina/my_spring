@@ -1,0 +1,129 @@
+@startuml
+participant DefaultListableBeanFactory
+participant AbstractBeanFactory
+participant DefaultSingletonBeanRegistry
+participant ObjectFactory
+participant AbstractAutowireCapableBeanFactory
+participant BeanDefinitionValueResolver
+
+activate DefaultListableBeanFactory #FFBBBB
+    DefaultListableBeanFactory -> AbstractBeanFactory: getBean获取对象A
+    activate AbstractBeanFactory #FFBBBB
+        AbstractBeanFactory->AbstractBeanFactory:调用doGetBean获取A对对象
+        activate AbstractBeanFactory
+            AbstractBeanFactory -> DefaultSingletonBeanRegistry: getSingleton获取对象A
+            activate DefaultSingletonBeanRegistry #FFBBBB
+            note right of DefaultSingletonBeanRegistry:分别从singletonObjects\n单例池(一级缓存中获取)，\nearlySingletonObjects \n二级缓存中获取，\nsingletonFactories\n三级缓存中获取
+            DefaultSingletonBeanRegistry --> AbstractBeanFactory:返回缓存的对象，但是此时没有
+            deactivate DefaultSingletonBeanRegistry
+
+            AbstractBeanFactory -> AbstractBeanFactory:标记当前A对象正在被创建
+            activate AbstractBeanFactory #FFBBBB
+            deactivate AbstractBeanFactory
+                activate DefaultSingletonBeanRegistry #FFBBBB
+                    DefaultSingletonBeanRegistry -> AbstractAutowireCapableBeanFactory:createBean创建A对象
+                        activate AbstractAutowireCapableBeanFactory
+                        AbstractAutowireCapableBeanFactory -> AbstractAutowireCapableBeanFactory :doCreateBean创建A对象
+                        activate AbstractAutowireCapableBeanFactory
+                            AbstractAutowireCapableBeanFactory -> AbstractAutowireCapableBeanFactory : 调用createBeanInstance通过类反射创建A对象
+                            activate AbstractAutowireCapableBeanFactory
+                            deactivate AbstractAutowireCapableBeanFactory
+
+                            AbstractAutowireCapableBeanFactory->DefaultSingletonBeanRegistry:调用addSingletonFactory\n创建A对象的ObjectFactory\n并暴露在三级缓存中
+                            activate DefaultSingletonBeanRegistry
+                            DefaultSingletonBeanRegistry-->AbstractAutowireCapableBeanFactory:返回
+                            deactivate DefaultSingletonBeanRegistry
+                            AbstractAutowireCapableBeanFactory->AbstractAutowireCapableBeanFactory:调用populateBean为对象A注入属性
+                            activate AbstractAutowireCapableBeanFactory
+                                AbstractAutowireCapableBeanFactory->AbstractAutowireCapableBeanFactory:applyPropertyValues
+                                activate AbstractAutowireCapableBeanFactory
+                                AbstractAutowireCapableBeanFactory->BeanDefinitionValueResolver:调用resolveValueIfNecessary解析需要注入B对象
+                                    activate BeanDefinitionValueResolver
+                                        BeanDefinitionValueResolver->BeanDefinitionValueResolver:调用resolveReference解析对象B的属性
+                                        activate BeanDefinitionValueResolver
+                                            BeanDefinitionValueResolver->AbstractBeanFactory:getBean获取对象B
+                                            activate AbstractBeanFactory
+                                                AbstractBeanFactory->AbstractAutowireCapableBeanFactory:调用createBean创建B对象
+                                                    AbstractAutowireCapableBeanFactory->AbstractAutowireCapableBeanFactory:doCreateBean创建B对象
+                                                    activate AbstractAutowireCapableBeanFactory
+                                                        AbstractAutowireCapableBeanFactory->AbstractAutowireCapableBeanFactory:createBeanInstance创建B对象
+                                                        activate AbstractAutowireCapableBeanFactory
+                                                        deactivate AbstractAutowireCapableBeanFactory
+
+                                                        AbstractAutowireCapableBeanFactory->DefaultSingletonBeanRegistry:调用addSingletonFactory\n创建B对象的ObjectFactory\n暴露在三级缓存中
+                                                        activate DefaultSingletonBeanRegistry
+                                                        DefaultSingletonBeanRegistry-->AbstractAutowireCapableBeanFactory:返回
+                                                        deactivate DefaultSingletonBeanRegistry
+
+                                                        AbstractAutowireCapableBeanFactory->AbstractAutowireCapableBeanFactory:调用populateBean为对象B注入属性
+                                                        activate AbstractAutowireCapableBeanFactory
+                                                            AbstractAutowireCapableBeanFactory->AbstractAutowireCapableBeanFactory:applyPropertyValues
+                                                            activate AbstractAutowireCapableBeanFactory
+                                                                AbstractAutowireCapableBeanFactory->BeanDefinitionValueResolver:调用resolveValueIfNecessary解析需要注入的属性为A对象
+                                                                activate BeanDefinitionValueResolver
+                                                                    BeanDefinitionValueResolver->BeanDefinitionValueResolver:调用resolveReference解析对象A的属性
+                                                                    activate BeanDefinitionValueResolver
+                                                                        BeanDefinitionValueResolver->AbstractBeanFactory:getBean获取需要注入的A对象
+                                                                        activate AbstractBeanFactory
+                                                                            AbstractBeanFactory->AbstractBeanFactory:调用doGetBean获取A对对象
+                                                                            activate AbstractBeanFactory
+                                                                                AbstractBeanFactory->DefaultSingletonBeanRegistry:调用getSingleton获取对象A
+                                                                                activate DefaultSingletonBeanRegistry
+                                                                                note right of DefaultSingletonBeanRegistry:从singletonObjects\n单例池(一级缓存)获取不到，\nearlySingletonObjects \n二级缓存中获取不到，\nsingletonFactories\n三级缓存中获取到ObjectFactory
+                                                                                    DefaultSingletonBeanRegistry->ObjectFactory:通过SmartInstantiationAwareBeanPostProcessor\n触发对A对象的增强
+                                                                                    activate ObjectFactory
+                                                                                    ObjectFactory-->DefaultSingletonBeanRegistry:返回增强后的A对象
+                                                                                        DefaultSingletonBeanRegistry->DefaultSingletonBeanRegistry:将A对象从三级缓存删除移动到二级缓存
+                                                                                    deactivate ObjectFactory
+                                                                                DefaultSingletonBeanRegistry-->AbstractBeanFactory:返回获取到A对象
+
+                                                                                deactivate DefaultSingletonBeanRegistry
+                                                                            deactivate AbstractBeanFactory
+                                                                        AbstractBeanFactory-->BeanDefinitionValueResolver:返回A对象
+                                                                        deactivate AbstractBeanFactory
+
+                                                                    deactivate BeanDefinitionValueResolver
+                                                                BeanDefinitionValueResolver-->AbstractAutowireCapableBeanFactory:返回resolveValueIfNecessary A对象结果
+                                                                deactivate BeanDefinitionValueResolver
+
+
+                                                                AbstractAutowireCapableBeanFactory->AbstractAutowireCapableBeanFactory:将A对象注入到B对象中
+                                                                activate AbstractAutowireCapableBeanFactory
+                                                                deactivate AbstractAutowireCapableBeanFactory
+                                                            deactivate AbstractAutowireCapableBeanFactory
+                                                        deactivate AbstractAutowireCapableBeanFactory
+
+                                                        AbstractAutowireCapableBeanFactory->DefaultSingletonBeanRegistry:将B对象从三级缓存中移除，\n放入一级缓存中
+                                                        activate DefaultSingletonBeanRegistry
+                                                        DefaultSingletonBeanRegistry-->AbstractAutowireCapableBeanFactory:此时单例池中存在B对象
+                                                        deactivate DefaultSingletonBeanRegistry
+                                                    AbstractAutowireCapableBeanFactory-->AbstractBeanFactory:返回对象B
+                                                    deactivate AbstractAutowireCapableBeanFactory
+
+                                            AbstractBeanFactory->BeanDefinitionValueResolver:返回getBean获取对象B
+                                            deactivate AbstractBeanFactory
+                                        deactivate BeanDefinitionValueResolver
+                                    BeanDefinitionValueResolver-->AbstractAutowireCapableBeanFactory:返回resolveValueIfNecessary的结果\n需要注入的对象B
+                                    deactivate BeanDefinitionValueResolver
+                                deactivate AbstractAutowireCapableBeanFactory
+                                AbstractAutowireCapableBeanFactory->AbstractAutowireCapableBeanFactory:将获取到的对象B注入到对象A中
+                                activate AbstractAutowireCapableBeanFactory
+                                deactivate AbstractAutowireCapableBeanFactory
+                            deactivate AbstractAutowireCapableBeanFactory
+                        deactivate AbstractAutowireCapableBeanFactory
+                        AbstractAutowireCapableBeanFactory-->DefaultSingletonBeanRegistry:返回createBean创建的A对象
+                        deactivate AbstractAutowireCapableBeanFactory
+                DefaultSingletonBeanRegistry->DefaultSingletonBeanRegistry:将A对象从二级缓存中移除，放到一级缓存中
+                activate DefaultSingletonBeanRegistry
+                deactivate DefaultSingletonBeanRegistry
+                DefaultSingletonBeanRegistry --> AbstractBeanFactory:返回getSingleton获取A对象
+                deactivate DefaultSingletonBeanRegistry
+        deactivate AbstractBeanFactory
+
+
+        AbstractBeanFactory-->DefaultListableBeanFactory:getBean返回对象A
+    deactivate AbstractBeanFactory
+
+deactivate DefaultListableBeanFactory
+
+@enduml

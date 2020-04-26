@@ -1,4 +1,5 @@
 com/youngforcoding/util/TransactionManager.class
+com/youngforcoding/aspect/LogUtil.class
 com/youngforcoding/pojo/Account.class
 com/youngforcoding/factory/FactoryBean.class
 com/youngforcoding/service/impl/TransferServiceImpl.class
@@ -12,5 +13,6 @@ com/youngforcoding/service/TransferService.class
 com/youngforcoding/dao/impl/JdbcAccountDaoImpl.class
 com/youngforcoding/factory/ProxyFactory.class
 com/youngforcoding/dao/AccountDao.class
+com/youngforcoding/pojo/AopTest.class
 com/youngforcoding/servlet/TransferServlet.class
 com/youngforcoding/pojo/ResourceTest.class

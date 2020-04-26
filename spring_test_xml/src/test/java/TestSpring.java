@@ -1,5 +1,7 @@
+import com.youngforcoding.pojo.AopTest;
 import com.youngforcoding.pojo.DITarget;
 import com.youngforcoding.pojo.LazyObj;
+import com.youngforcoding.service.TransferService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -19,7 +21,7 @@ public class TestSpring {
     ApplicationContext applicationContext;
 
     @Before
-    public void prepare(){
+    public void prepare() {
         applicationContext = new ClassPathXmlApplicationContext("application.xml");
     }
 
@@ -43,11 +45,25 @@ public class TestSpring {
     }
 
     @Test
-    public void test02(){
+    public void test02() {
         DITarget diTarget = (DITarget) applicationContext.getBean("diTarget");
         System.out.println(diTarget);
         System.out.println(diTarget.getLazyObj());
 
         System.out.println(applicationContext.getBean("diTarget2"));
+    }
+
+    @Test
+    public void test03() {
+        AopTest aopTest = (AopTest) applicationContext.getBean("aopTest");
+        aopTest.sayHello();
+    }
+
+    @Test
+    public void test04() throws Exception {
+        TransferService transferService = (TransferService) applicationContext.getBean("transferService");
+        transferService.transfer("6029621011000", "6029621011001", 1);
+//        transferService.transfer();
+
     }
 }
