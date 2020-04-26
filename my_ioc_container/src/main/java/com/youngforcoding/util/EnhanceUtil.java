@@ -55,17 +55,4 @@ public class EnhanceUtil {
             return result;
         });
     }
-
-    public static void main(String[] args) {
-        try {
-            throw new InvocationTargetException(new RuntimeException("111"));
-        } catch (InvocationTargetException e) {
-            System.out.println(e.getClass().isAssignableFrom(Exception.class));
-            if (Exception.class.isAssignableFrom(e.getTargetException().getClass())) {
-                throw new RuntimeException("2222");
-            }
-        }
-        System.out.println();
-    }
-
 }

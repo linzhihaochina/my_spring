@@ -29,9 +29,8 @@
 
         <dependency>
             <groupId>com.youngforcoding</groupId>
-            <artifactId>my_iou_container</artifactId>
+            <artifactId>my_ioc_container</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
