@@ -47,6 +47,7 @@ public class EnhanceUtil {
                     if (e.getClass() == exceptionClass) {
                         TransactionManager.rollback();
                     }
+                    throw e;
                 }
             } else {
                 result = method.invoke(target, objects);
