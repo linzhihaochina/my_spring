@@ -6,6 +6,7 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Set;
 
@@ -33,7 +34,7 @@ public class EnhanceUtil {
 
     public static Object enhanceTransactional(Object target, Set<String> methods) {
         return Enhancer.create(target.getClass(), (MethodInterceptor) (o, method, objects, methodProxy) -> {
-            Object result = null;
+            Object result;
             if (methods.contains(method.getName())) {
                 Transactional transactional = method.getDeclaredAnnotation(Transactional.class);
                 Class<? super Exception> exceptionClass = transactional.rollbackFor();
@@ -42,9 +43,8 @@ public class EnhanceUtil {
                 try {
                     result = method.invoke(target, objects);
                     TransactionManager.commit();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    if (e.getClass() == exceptionClass) {
+                } catch (InvocationTargetException e) {
+                    if (exceptionClass.isAssignableFrom(e.getClass())) {
                         TransactionManager.rollback();
                     }
                     throw e;
@@ -54,6 +54,18 @@ public class EnhanceUtil {
             }
             return result;
         });
+    }
+
+    public static void main(String[] args) {
+        try {
+            throw new InvocationTargetException(new RuntimeException("111"));
+        } catch (InvocationTargetException e) {
+            System.out.println(e.getClass().isAssignableFrom(Exception.class));
+            if (Exception.class.isAssignableFrom(e.getTargetException().getClass())) {
+                throw new RuntimeException("2222");
+            }
+        }
+        System.out.println();
     }
 
 }
