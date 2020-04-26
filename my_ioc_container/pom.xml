@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>my_iou_container</artifactId>
+    <artifactId>my_ioc_container</artifactId>
 
 
     <dependencies>

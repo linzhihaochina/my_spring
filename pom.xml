@@ -9,8 +9,8 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>my_iou_container</module>
-        <module>my_iou_container_test</module>
+        <module>my_ioc_container</module>
+        <module>my_ioc_container_test</module>
         <module>spring_test_xml</module>
         <module>spring_test_xml_annotation</module>
         <module>spring_test_annotation</module>
